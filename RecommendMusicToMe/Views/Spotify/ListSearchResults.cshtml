@@ -101,9 +101,6 @@
                                     "'&ShowArtist=' + document.getElementById('ListArtists').checked + " +
                                     "'&ShowPage=' + " + Model.NextPage() + ";"
                             })*@
-                        @Html.ActionLink("Next Page >> " + Model.NextPage(), "ListSearchResultsNextPage", "Spotify", null, new { @class = "btn btn-info" })
-                        @*<input type="submit" value="Next Page >>" class="btn btn-info"  />*@
-                        @**<input type="submit" value="Next page" onclick="this.href='@Url.Action("ListSearchResultsNextPage", "Spotify")'" class="btn btn-info"/>*@
                     }
                 </p>
 
@@ -134,6 +131,7 @@
                 }
             </div>
             <div class="col-md-6">
+                <p>Click this button to view the recommendations by Spotify, using more criteria you can choose from. <br/>You may use the back button to modify this page again</p>
                 @if (Model.FavouriteTracks.Count() > 0)
                 {
                     @Html.ActionLink("Get Recommendations", "GetRecommendations", "Spotify", null, new { @class = "btn btn-info" })
@@ -143,7 +141,7 @@
             </div>
         </div>
     }
-    <h2>Spotify Response</h2>
+    <h2>Spotify search results</h2>
     <div>
 
         <div class="row">

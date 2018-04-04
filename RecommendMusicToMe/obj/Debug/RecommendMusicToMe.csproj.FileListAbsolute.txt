@@ -88,3 +88,4 @@ C:\Users\Grant\source\repos\RecommendMusicToMe\RecommendMusicToMe\obj\Debug\Reco
 C:\Users\Grant\source\repos\RecommendMusicToMe\RecommendMusicToMe\obj\Debug\RecommendMusicToMe.csproj.CopyComplete
 C:\Users\Grant\source\repos\RecommendMusicToMe\RecommendMusicToMe\obj\Debug\RecommendMusicToMe.dll
 C:\Users\Grant\source\repos\RecommendMusicToMe\RecommendMusicToMe\obj\Debug\RecommendMusicToMe.pdb
+C:\Users\Grant\source\repos\RecommendMusicToMe\RecommendMusicToMe\obj\Debug\RecommendMusicToMe.csprojResolveAssemblyReference.cache
