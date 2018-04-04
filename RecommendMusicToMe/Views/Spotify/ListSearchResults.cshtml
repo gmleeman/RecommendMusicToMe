@@ -1,0 +1,247 @@
+﻿@model RecommendMusicToMe.Models.SearchCriteriaModel
+@{
+    ViewBag.Title = "Spotify Search Results";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ListSearchResults</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @*<input type="hidden" value="" name="addtrackid" />
+            <input type="hidden" value="" name="addtrackname" />*@
+
+        <div class="row">
+            <div class="col-md-6">
+                <p>Enter your search text below</p>
+            </div>
+            <div class="col-md-6">
+                <p>Hit this button to search</p>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    @Html.LabelFor(m => m.SearchText, new { style = "display:inline;" }) -
+                    @Html.TextBoxFor(model => model.SearchText, htmlAttributes: new { @class = "form-control", style = "display:inline;" })
+
+                <p>
+                    @Html.CheckBoxFor(model => model.ListAlbums)
+                    @Html.LabelFor(m => m.ListAlbums)
+
+                    @Html.CheckBoxFor(model => model.ListArtists)
+                    @Html.LabelFor(m => m.ListArtists)
+
+                    @Html.CheckBoxFor(model => model.ListPlaylist)
+                    @Html.LabelFor(m => m.ListPlaylist)
+
+                    @Html.CheckBoxFor(model => model.ListTrack)
+                    @Html.LabelFor(m => m.ListTrack)
+                </p>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    @*Html.ActionLink("Spotify Search", "ListSearchResults", "Spotify", null,
+                        new
+                        {
+                            @class = "btn btn-info",
+                            @id = "spotifySearch",
+                            onclick = "this.href += '?searchNow=' + document.getElementById('SearchText').value + " +
+                                "'&ShowAlbum=' + document.getElementById('ListAlbums').checked + " +
+                                "'&ShowPlaylist=' + document.getElementById('ListPlaylist').checked + " +
+                                "'&ShowTrack=' + document.getElementById('ListTrack').checked + " +
+                                "'&ShowArtist=' + document.getElementById('ListArtists').checked + " +
+                                "'&ShowPage=1';"
+                        })*@
+                </p>
+                <p><input type="submit" value="Refresh Search" class="btn btn-info" /></p>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    @if (Model.PageNumber > 1)
+                    {
+                        @Html.ActionLink("<< Previous Page", "ListSearchResults", "Spotify", null,
+                                                          new
+                                                          {
+                                                              @class = "btn btn-info",
+                                                              @id = "spotifySearch",
+                                                              onclick = "this.href += '?searchNow=' + document.getElementById('SearchText').value + " +
+                                                                  "'&ShowAlbum=' + document.getElementById('checkAlbums').checked + " +
+                                                                  "'&ShowPlaylist=' + document.getElementById('ListPlaylist').checked + " +
+                                                                  "'&ShowTrack=' + document.getElementById('ListTrack').checked + " +
+                                                                  "'&ShowArtist=' + document.getElementById('ListArtists').checked + " +
+                                                                  "'&ShowPage=' + " + Model.PreviousPage() + ";"
+                                                          })
+                    }
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p>
+                    @if (Model.IsNextPage)
+                    {
+                        @*Html.ActionLink("Next Page >>", "ListSearchResults", "Spotify", null,
+                            new
+                            {
+                                @class = "btn btn-info",
+                                @id = "spotifySearch",
+                                onclick = "this.href += '?searchNow=' + document.getElementById('SearchText').value + " +
+                                    "'&ShowAlbum=' + document.getElementById('checkAlbums').checked + " +
+                                    "'&ShowPlaylist=' + document.getElementById('ListPlaylist').checked + " +
+                                    "'&ShowTrack=' + document.getElementById('ListTrack').checked + " +
+                                    "'&ShowArtist=' + document.getElementById('ListArtists').checked + " +
+                                    "'&ShowPage=' + " + Model.NextPage() + ";"
+                            })*@
+                        @Html.ActionLink("Next Page >> " + Model.NextPage(), "ListSearchResultsNextPage", "Spotify", null, new { @class = "btn btn-info" })
+                        @*<input type="submit" value="Next Page >>" class="btn btn-info"  />*@
+                        @**<input type="submit" value="Next page" onclick="this.href='@Url.Action("ListSearchResultsNextPage", "Spotify")'" class="btn btn-info"/>*@
+                    }
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                @if (Model.FavouriteTracks.Count() == 0)
+                {
+                    <p><strong>No favourite tracks chosen yet.  Please click on a Track to add it to favourites</strong></p>
+                }
+                else
+                {
+                    <p>Favourite Tracks (up to 5)</p>
+                    for (int ii = 0; ii < Model.FavouriteTracks.Count(); ii++)
+                    {
+                        <p>
+                            @*Html.EditorFor(m => m.FavouriteTracks[ii], "FavouriteTrackItem")*@
+                            @Html.HiddenFor(m => m.FavouriteTracks[ii].TrackID)
+                            @Html.EditorFor(m => m.FavouriteTracks[ii].TrackName)
+                        </p>
+                    }
+                }
+            </div>
+            <div class="col-md-6">
+                @if (Model.FavouriteTracks.Count() > 0)
+                {
+                    @Html.ActionLink("Get Recommendations", "GetRecommendations", "Spotify", null, new { @class = "btn btn-info" })
+                }
+
+
+            </div>
+        </div>
+    }
+    <h2>Spotify Response</h2>
+    <div>
+
+        <div class="row">
+            @if (Model.ListPlaylist)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    <p><strong>Playlists</strong></p>
+                </div>
+            }
+            @if (Model.ListAlbums)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    <p><strong>Albums</strong></p>
+                </div>
+            }
+            @if (Model.ListArtists)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    <p><strong>Artists</strong></p>
+                </div>
+            }
+            @if (Model.ListTrack)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    <p><strong>Tracks</strong></p>
+                </div>
+            }
+        </div>
+
+
+        <div class="row">
+            @if (Model.ListPlaylist)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    @if (ViewBag.SearchSpotify != null)
+                    {
+                        foreach (Item4 plist in ((SpotifySearchResults)ViewBag.SearchSpotify).playlists.items)
+                        {
+                            <a href=@plist.external_urls.spotify>@plist.name</a><br />
+                        }
+                    }
+                </div>
+            }
+            @if (Model.ListAlbums)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    @if (ViewBag.SearchSpotify != null && ((SpotifySearchResults)ViewBag.SearchSpotify).albums != null)
+                    {
+                        foreach (Item plist in ((SpotifySearchResults)ViewBag.SearchSpotify).albums.items)
+                        {
+                            <a href=@plist.external_urls.spotify>@plist.name</a><br />
+                        }
+                    }
+                </div>
+            }
+            @if (Model.ListArtists)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    @if (ViewBag.SearchSpotify != null && ((SpotifySearchResults)ViewBag.SearchSpotify).artists != null)
+                    {
+                        foreach (Item2 plist in ((SpotifySearchResults)ViewBag.SearchSpotify).artists.items)
+                        {
+                            <a href=@plist.external_urls.spotify>@plist.name</a><br />
+                        }
+                    }
+                </div>
+            }
+            @if (Model.ListTrack)
+            {
+                <div class=@Model.GetBootStrapColWidth()>
+                    @if (ViewBag.SearchSpotify != null && ((SpotifySearchResults)ViewBag.SearchSpotify).tracks != null)
+                    {
+                        foreach (TrackObject track in ((SpotifySearchResults)ViewBag.SearchSpotify).tracks.items)
+                        {
+                            using (Html.BeginForm("AddFavouriteTrack", "Spotify", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(m => m.SearchText)
+                                @Html.HiddenFor(m => m.ListAlbums)
+                                @Html.HiddenFor(m => m.ListArtists)
+                                @Html.HiddenFor(m => m.ListPlaylist)
+                                @Html.HiddenFor(m => m.ListTrack)
+                                for (int ii = 0; ii < Model.FavouriteTracks.Count(); ii++)
+                                {
+                                    @Html.HiddenFor(m => m.FavouriteTracks[ii].TrackID)
+                                    @Html.HiddenFor(m => m.FavouriteTracks[ii].TrackName)
+                                }
+                                <input type="hidden" value="@track.id" name="addtrackid" />
+                                <input type="hidden" value="@track.name" name="addtrackname" />
+                                <input type="submit" value="@track.name (@track.artists.FirstOrDefault().name)" class="btn btn-link" />
+                            }
+                        }
+                    }
+                </div>
+            }
+        </div>
+
+
+    </div>
+
+</body>
+</html>

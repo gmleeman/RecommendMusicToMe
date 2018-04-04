@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "callback";
+}
+<script type="text/javascript" language="javascript">
+    var hashes = window.location.hash;
+    hashes = hashes.replace('#', '?');
+    if (hashes !== "")
+        window.location = hashes;
+</script>
+<h2>Spotify Response</h2>
+<div>
+    @if (ViewBag.Playlists != null)
+    {
+        foreach (Playlist plist in ViewBag.Playlists.Items)
+        {
+            @plist.Name;<br />
+        }
+    }
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <p>
+
+        </p>
+    </div>
+    <div class="col-md-4">
+        <p>
+            @Html.ActionLink("Spotify Search", "ListSearchResults", "Spotify", new { SearchText = "Eye of the tiger" }, new { @class = "btn btn-info", @id = "spotifySearch" })
+        </p>
+    </div>
+</div>
+
