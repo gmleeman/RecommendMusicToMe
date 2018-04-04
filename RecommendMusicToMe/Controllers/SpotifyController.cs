@@ -47,10 +47,13 @@ namespace RecommendMusicToMe.Controllers
             if (addtrackid != null && addtrackname != null)
                 if (addtrackid != "" && addtrackname != "")
                 {
-                    var newTrack = new FavouriteTrackItem();
-                    newTrack.TrackID = addtrackid;
-                    newTrack.TrackName = addtrackname;
-                    criteriaSpotify.FavouriteTracks.Add(newTrack);
+                    if (!criteriaSpotify.FavouriteTracks.Exists(x => x.TrackID == addtrackid))
+                    {
+                        var newTrack = new FavouriteTrackItem();
+                        newTrack.TrackID = addtrackid;
+                        newTrack.TrackName = addtrackname;
+                        criteriaSpotify.FavouriteTracks.Add(newTrack);
+                    }
                 }
             cache["SearchCriteriaModel"] = criteriaSpotify; // store in cache
 
